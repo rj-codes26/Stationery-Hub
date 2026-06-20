@@ -19,9 +19,13 @@ function App() {
   ]
 
   const [products, setProducts] = useState([]);
+  const [mixedProducts, setMixedProducts] = useState([]);
+  const shuffleArray = (array) => {
+    return [...array].sort(() => Math.random() - 0.5);
+  };
   const categories = ['All', ...new Set(products.map(p => p.tag))]
   const filteredProducts = activeCategory === 'All'
-    ? products
+    ? mixedProducts
     : products.filter(p => p.tag === activeCategory)
 
   // Auto-advance slider
@@ -33,23 +37,24 @@ function App() {
   }, [])
 
   useEffect(() => {
-  fetch("http://localhost:5000/products")
-    .then((res) => res.json())
-    .then((data) => {
-      const formattedProducts = data.map((item) => ({
-        id: item._id,
-        name: item.name,
-        image: item.image,
-        tag: item.tag,
-        priceNum: Number(item.price),
-        price: `₹${item.price}`,
-        originalPrice: `₹${Math.round(item.price * 1.2)}`
-      }));
+    fetch("http://localhost:5000/products")
+      .then((res) => res.json())
+      .then((data) => {
+        const formattedProducts = data.map((item) => ({
+          id: item._id,
+          name: item.name,
+          image: item.image,
+          tag: item.tag,
+          priceNum: Number(item.price),
+          price: `₹${item.price}`,
+          originalPrice: `₹${Math.round(item.price * 1.2)}`
+        }));
 
-      setProducts(formattedProducts);
-    })
-    .catch((err) => console.error("Error fetching products:", err));
-}, []);
+        setProducts(formattedProducts);
+        setMixedProducts(shuffleArray(formattedProducts));
+      })
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
 
   // Lock body scroll when modals open
   useEffect(() => {
