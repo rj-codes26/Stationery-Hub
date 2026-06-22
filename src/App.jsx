@@ -37,7 +37,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    fetch("http://localhost:5000/products")
+    fetch("https://stationery-hub-ywfc.onrender.com")
       .then((res) => res.json())
       .then((data) => {
         const formattedProducts = data.map((item) => ({
