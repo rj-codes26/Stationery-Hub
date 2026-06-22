@@ -11,6 +11,12 @@ connectDB();
 app.get("/", (req, res) => {
   res.send("API Running");
 });
+app.get("/test", (req, res) => {
+  res.json({
+    success: true,
+    message: "Backend working"
+  });
+});
 
 const PORT = process.env.PORT || 5000;
 
